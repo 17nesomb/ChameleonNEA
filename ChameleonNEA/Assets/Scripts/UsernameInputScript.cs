@@ -24,9 +24,9 @@ public class UsernameInputScript : MonoBehaviour
     /// </summary>
     public void limitLength()
     {
-        if (usernameInput.text.Length > 16)
+        if (usernameInput.text.Length > 16) //if the username input length is more than 16 characters
         {
-            usernameInput.text = usernameInput.text.Substring(0, 16);
+            usernameInput.text = usernameInput.text.Substring(0, 16); //sets the text in the box to the first 16 characters
         }
     }
 
@@ -38,14 +38,14 @@ public class UsernameInputScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI errorBox;
     public bool isValid()
     {
-        if(usernameInput.text == "")
+        if(usernameInput.text == "") //if text box is empty
         {
             errorBox.text = ("Please input a username");
             return false;
         }
         else
         {
-            errorBox.text = ("");
+            errorBox.text = (""); //removes the error box
             return true;
         }
 

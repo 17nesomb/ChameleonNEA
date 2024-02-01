@@ -34,10 +34,10 @@ public class HostBtnScript : MonoBehaviour
     {
         if (usernameInputScript.isValid())
         {
-            gameScreenManager.showScreen(gameScreen);
-            string username = usernameInputScript.getUsername();
-            gameScreenManager.addPlayerToList(username);
-            gameManager.StartHostWithRelay();
+            string username = usernameInputScript.getUsername(); //gets the username
+            gameScreenManager.addPlayerToList(username); //adds the host's name, as they're not a client so it will have to run differently
+            gameManager.StartHostWithRelay(); //starts a host
+            gameScreenManager.showScreen(gameScreen); //shows the game screen
             gameScreenManager.setStartBtnVisible(true);
         }
     }

@@ -36,10 +36,9 @@ public class JoinBtnScript : MonoBehaviour
     {
         if (joinCodeScript.isValidCode() && usernameInputScript.isValid())
         {
-            string username = usernameInputScript.getUsername();
-            string joinCode = joinCodeScript.getInputtedCode();
-            gameManager.JoinGameWithRelay(joinCode);
-            gameScreenManager.setStartBtnVisible(false);
+            string joinCode = joinCodeScript.getInputtedCode(); //gets the join code
+            gameManager.JoinGameWithRelay(joinCode); //joins the relay with the join code
+            gameScreenManager.setStartBtnVisible(false); //sets the join game button to invisible, as should be a client
         }
 
         

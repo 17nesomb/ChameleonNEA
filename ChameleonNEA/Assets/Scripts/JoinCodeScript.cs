@@ -33,12 +33,12 @@ public class JoinCodeScript : MonoBehaviour
     {
         if (codeInputBox.text.Length != 6 || !(codeInputBox.text.All(char.IsLetterOrDigit))) //https://stackoverflow.com/questions/1046740/how-can-i-validate-a-string-to-only-allow-alphanumeric-characters-in-it
         {
-            errorBox.text = "Please enter a valid Join Code";
+            errorBox.text = "Please enter a valid Join Code";  
             return (false);
         }
         else
         {
-            errorBox.text = ("");
+            errorBox.text = (""); //clears the error box
             return true;
         }
     }

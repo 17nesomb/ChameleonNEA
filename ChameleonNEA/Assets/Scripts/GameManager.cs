@@ -95,10 +95,10 @@ public class GameManager : NetworkBehaviour
     void requestUsernameClientRPC(ulong clientId)
     {
 
-        if (NetworkManager.Singleton.LocalClientId == clientId)
+        if (NetworkManager.Singleton.LocalClientId == clientId)  //Checks that the computer the RPC is running on is the right client
         {
-            string username = usernameInputScript.getUsername();
-            sendUsernameServerRPC(username);
+            string username = usernameInputScript.getUsername(); //gets the username
+            sendUsernameServerRPC(username); //runs the sendUsernameServerRPC on the host computer
         }
         gameScreenManager.showScreen(gameScreen);
         
@@ -134,7 +134,7 @@ public class GameManager : NetworkBehaviour
             username = username += ("1");
         }
 
-        Debug.Log(username + " --> " + senderId.ToString());
+        Debug.Log(username + " --> " + senderId.ToString()); 
         playerDict.Add(username, senderId);
         addPlayerClientRPC(username);
     }
