@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
     GameScreenManager gameScreenManager;
     UsernameInputScript usernameInputScript;
     StartGameScript startGameScript;
-    Dictionary<string, ulong> playerDict = new Dictionary<string, ulong>();
+    public Dictionary<string, ulong> playerDict = new Dictionary<string, ulong>();
     enum currentScreen
     {
         GameScreen,
@@ -110,10 +110,14 @@ public class GameManager : NetworkBehaviour
         gameScreenManager.addPlayerToList(username);
     }
 
+    /// <summary>
+    /// Shows the clue input panel on the client's screen
+    /// </summary>
+    /// <param name="clientRpcParams"> only sends to the clientID specified by the params </param>
     [ClientRpc]
-    void turnStartClientRPC(ClientRpcParams clientRpcParams)
+    public void turnStartClientRPC(ClientRpcParams clientRpcParams)
     {
-        
+        gameScreenManager.setCluePanelVisible(true);
     }
 
     //For the clients-----------------------------------------------------------------------------------------------------

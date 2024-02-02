@@ -3903,7 +3903,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24d9b77170fb1f94ab9c779f0a0b75f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
   TitleScreen: {fileID: 1805595092}
   GameScreen: {fileID: 1344252015}
   VoteScreen: {fileID: 1609535396}

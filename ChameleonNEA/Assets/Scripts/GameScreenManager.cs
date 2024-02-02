@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GameScreenManager : MonoBehaviour
 {
-    [SerializeField] GameManager gameManager;
+    GameManager gameManager;
     [SerializeField] GameObject TitleScreen;
     [SerializeField] GameObject GameScreen;
     [SerializeField] GameObject VoteScreen;
