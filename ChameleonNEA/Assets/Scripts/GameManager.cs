@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
     GameScreenManager gameScreenManager;
     UsernameInputScript usernameInputScript;
     StartGameScript startGameScript;
-    public Dictionary<string, ulong> playerDict = new Dictionary<string, ulong>();
+    public Dictionary<ulong, string> playerDict = new Dictionary<ulong, string>();
     enum currentScreen
     {
         GameScreen,
@@ -44,11 +44,11 @@ public class GameManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) => //Subscribes the anonymous function to the OnClientConnected Action
         {
-            
+
             if (NetworkManager.Singleton.IsHost)
             {
                 requestUsernameClientRPC(clientId); //Runs requestUsernameClientRPC on all of the client's GameManagers
-                foreach(string username in playerDict.Keys)
+                foreach (string username in playerDict.Values)
                 {
                     addPlayerClientRPC(username);
                 }
@@ -57,17 +57,23 @@ public class GameManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnServerStarted += () => //Subscribes the anonymous function to the OnServerStarted Action
         {
-            if(NetworkManager.Singleton.IsHost)
+            if (NetworkManager.Singleton.IsHost)
             {
                 ulong hostId = 0;
                 requestUsernameClientRPC(hostId); //Requests the username from the host, this can't go in the client connected as the host isn't a client
             }
         };
 
-        
-        
+        NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
+        {
+            removePlayerClientRPC(playerDict[clientId]);
+            playerDict.Remove(clientId);
+        };
 
-       
+
+
+
+
     }
 
     // Update is called once per frame
@@ -101,13 +107,26 @@ public class GameManager : NetworkBehaviour
             sendUsernameServerRPC(username); //runs the sendUsernameServerRPC on the host computer
         }
         gameScreenManager.showScreen(gameScreen);
-        
+
     }
 
     [ClientRpc]
     void addPlayerClientRPC(string username)
     {
         gameScreenManager.addPlayerToList(username);
+    }
+
+    [ClientRpc]
+    void removePlayerClientRPC(string username)
+    {
+        gameScreenManager.removePlayerFromList(username);
+    }
+
+    [ClientRpc]
+
+    public void sendCardClientRPC(int cardIndex)
+    {
+        gameScreenManager.showGameCard(cardIndex);
     }
 
     /// <summary>
@@ -133,13 +152,13 @@ public class GameManager : NetworkBehaviour
     void sendUsernameServerRPC(string username, ServerRpcParams serverRpcParams = default)
     {
         ulong senderId = serverRpcParams.Receive.SenderClientId; //Gets the id of the client that sent their username
-        if (playerDict.ContainsKey(username)) //If there is already a client with that name
+        if (playerDict.ContainsValue(username)) //If there is already a client with that name
         {
             username = username += ("1");
         }
 
         Debug.Log(username + " --> " + senderId.ToString()); 
-        playerDict.Add(username, senderId);
+        playerDict.Add(senderId, username);
         addPlayerClientRPC(username);
     }
 

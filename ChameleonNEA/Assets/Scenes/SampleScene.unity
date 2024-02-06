@@ -917,7 +917,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 136253148}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 136253150}
+        m_TargetAssemblyTypeName: StartGameScript, Assembly-CSharp
+        m_MethodName: gameSetup
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &136253148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3918,6 +3930,16 @@ MonoBehaviour:
   joinCodeTextBox: {fileID: 1329351480}
   startGameBtn: {fileID: 136253147}
   cluePanel: {fileID: 1529679434}
+  themeTMP: {fileID: 773244659}
+  wordListTMPs: []
+  cards:
+  - {fileID: 11400000, guid: 34f26b986052d864eb2249d8396fb475, type: 2}
+  - {fileID: 11400000, guid: 44d9a4ebe2af5e84e92ea8216ca63bdd, type: 2}
+  - {fileID: 11400000, guid: e497c90ac1ece5640bc94e3688a83256, type: 2}
+  - {fileID: 11400000, guid: 1c6cd78d1e5dbcd41a9459ab85ef1a6d, type: 2}
+  - {fileID: 11400000, guid: 3748808ae3265234181b456c4316b156, type: 2}
+  - {fileID: 11400000, guid: 5f391a398b5b93e4f93449553631a6fb, type: 2}
+  - {fileID: 11400000, guid: 47485b11c791d1f46861e31cd523ebd1, type: 2}
 --- !u!4 &671318068
 Transform:
   m_ObjectHideFlags: 0

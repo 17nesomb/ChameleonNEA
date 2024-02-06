@@ -58,6 +58,26 @@ public class GameScreenManager : MonoBehaviour
         }
     }
 
+    public void removePlayerFromList(string playerName)
+    {
+        string[] playerNames = new string[8];
+        int count = 0;
+        foreach (TextMeshProUGUI textBox in usernameList)
+        {
+            if(textBox.text != playerName)
+            {
+                playerNames[count] = textBox.text;
+                count++;
+            }
+        }
+
+        for(int i = 0; i < 8;)
+        {
+            usernameList[i].text = playerNames[i];
+        }
+        
+    }
+
     [SerializeField] TextMeshProUGUI joinCodeTextBox;
     public void showJoinCode(string joinCode)
     {
@@ -77,6 +97,18 @@ public class GameScreenManager : MonoBehaviour
         cluePanel.SetActive(visible);
     }
 
+    [SerializeField] TextMeshProUGUI themeTMP;
+    [SerializeField] TextMeshProUGUI[] wordListTMPs;
+    [SerializeField] public Card[] cards;
+    public void showGameCard(int cardIndex)
+    {
+        Card currentCard = cards[cardIndex];
+        themeTMP.text = currentCard.theme;
+        for(int i = 0; i < 16; i++)
+        {
+            wordListTMPs[i].text = currentCard.words[i];
+        }
+    }
 }
 
 

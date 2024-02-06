@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class StartGameScript : MonoBehaviour
@@ -26,13 +25,26 @@ public class StartGameScript : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
-
+    
     /// <summary>
     /// This will do make the game playable, by choosing a random card, chameleon and word
     /// </summary>
-    void gameSetup()
+    public void gameSetup()
     {
+        //Choose game card
+        int numOfCards = gameScreenManager.cards.Length;
+        int cardIndex = Random.Range(0, numOfCards);
+        gameManager.sendCardClientRPC(cardIndex);
+            //give number to host to send to all players
 
+        //Choose player index to be chameleon
+            //random number from numPlayers
+            //give game to host to send the chameleon a trigger
+
+        //Choose random word from card
+        int wordIndex = Random.Range(0, 16);
+            //random number 1,16
+            //give number to host to send to all players but the chameleon
     }
 
     public bool clueGiven = false;
@@ -46,13 +58,13 @@ public class StartGameScript : MonoBehaviour
         //hide button
         gameScreenManager.setCluePanelVisible(false);
         //loop for each client
-        foreach(KeyValuePair<string,ulong> player in gameManager.playerDict)
+        foreach(KeyValuePair<ulong,string> player in gameManager.playerDict)
         {
             ClientRpcParams clientRpcParams = new ClientRpcParams
             {
                 Send = new ClientRpcSendParams
                 {
-                    TargetClientIds = new ulong[] {player.Value}
+                    TargetClientIds = new ulong[] {player.Key}
                 }
             };
 
