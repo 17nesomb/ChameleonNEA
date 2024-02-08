@@ -18,12 +18,6 @@ public class GameManager : NetworkBehaviour
     UsernameInputScript usernameInputScript;
     StartGameScript startGameScript;
     public Dictionary<ulong, string> playerDict = new Dictionary<ulong, string>();
-    enum currentScreen
-    {
-        GameScreen,
-        VoteScreen,
-        LeaderboardScreen
-    }
 
     void Awake()
     {
@@ -66,12 +60,17 @@ public class GameManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
         {
+            /*
             removePlayerClientRPC(playerDict[clientId]);
             playerDict.Remove(clientId);
+            */
         };
 
 
-
+        public int numOfPlayers()
+        {
+            return NetworkManager.Singleton.ConnectedClients;
+        }
 
 
     }
@@ -123,10 +122,15 @@ public class GameManager : NetworkBehaviour
     }
 
     [ClientRpc]
-
     public void sendCardClientRPC(int cardIndex)
     {
         gameScreenManager.showGameCard(cardIndex);
+    }
+
+    [ClientRpc]
+    public void sendWordClientRPC(int wordIndex, ClientRpcParams clientRpcParams)
+    {
+        gameScreenManager.showSecretWord(wordIndex);
     }
 
     /// <summary>

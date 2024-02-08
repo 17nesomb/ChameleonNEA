@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -34,15 +35,19 @@ public class StartGameScript : MonoBehaviour
         //Choose game card
         int numOfCards = gameScreenManager.cards.Length;
         int cardIndex = Random.Range(0, numOfCards);
-        gameManager.sendCardClientRPC(cardIndex);
             //give number to host to send to all players
-
+        gameManager.sendCardClientRPC(cardIndex);
         //Choose player index to be chameleon
-            //random number from numPlayers
+        int numPlayers = gameManager.numOfPlayers();
+        //random number from numPlayers
+        int chameleonIndex = Random(0, numPlayers);
+        ulong chameleonID;
+        ulong[] notChameleonIDs = new ulong[numPlayers - 1];
             //give game to host to send the chameleon a trigger
 
         //Choose random word from card
         int wordIndex = Random.Range(0, 16);
+        gameManager.sendWordClientRPC(wordIndex);
             //random number 1,16
             //give number to host to send to all players but the chameleon
     }

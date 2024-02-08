@@ -62,12 +62,12 @@ public class GameScreenManager : MonoBehaviour
     {
         string[] playerNames = new string[8];
         int count = 0;
-        foreach (TextMeshProUGUI textBox in usernameList)
+        foreach (TextMeshProUGUI textBox in usernameList) //loops through each of the text boxes
         {
-            if(textBox.text != playerName)
+            if(textBox.text != playerName) //If the name isnt being removed
             {
-                playerNames[count] = textBox.text;
-                count++;
+                playerNames[count] = textBox.text; //add it to the list and increment count
+                count++; 
             }
         }
 
@@ -85,7 +85,6 @@ public class GameScreenManager : MonoBehaviour
     }
 
     [SerializeField] Button startGameBtn;
-
     public void setStartBtnVisible(bool visible)
     {
         startGameBtn.gameObject.SetActive(visible);
@@ -100,14 +99,27 @@ public class GameScreenManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI themeTMP;
     [SerializeField] TextMeshProUGUI[] wordListTMPs;
     [SerializeField] public Card[] cards;
+    Card currentCard;
     public void showGameCard(int cardIndex)
     {
-        Card currentCard = cards[cardIndex];
+        currentCard = cards[cardIndex];
         themeTMP.text = currentCard.theme;
         for(int i = 0; i < 16; i++)
         {
             wordListTMPs[i].text = currentCard.words[i];
         }
+    }
+
+    [SerializeField] TextMeshProUGUI secretWordTMP;
+    public void showSecretWord(int wordIndex)
+    {
+        word = currentCard.words[wordIndex];
+        secretWordTMP.text = word;
+    }
+
+    public void showChameleon()
+    {
+        secretWordTMP.text = ("You are the chameleon - Blend in!");
     }
 }
 
