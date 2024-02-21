@@ -28,7 +28,6 @@ public class GameScreenManager : MonoBehaviour
     }
     private void Awake()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void showScreen(GameObject screen)
@@ -58,24 +57,26 @@ public class GameScreenManager : MonoBehaviour
         }
     }
 
-    public void removePlayerFromList(string playerName)
+    
+    public void removePlayerFromList(string leavingPlayerName)
     {
-        string[] playerNames = new string[8];
-        int count = 0;
-        foreach (TextMeshProUGUI textBox in usernameList) //loops through each of the text boxes
+        List<string> playersInGame = new List<string>();
+        foreach (TextMeshProUGUI playerName in usernameList)
         {
-            if(textBox.text != playerName) //If the name isnt being removed
-            {
-                playerNames[count] = textBox.text; //add it to the list and increment count
-                count++; 
-            }
+            playersInGame.Add(playerName.text);
         }
 
-        for(int i = 0; i < 8;)
+        playersInGame.Remove(leavingPlayerName);
+        playersInGame.Add("");
+
+        int n = 0;
+
+        foreach (TextMeshProUGUI playerName in usernameList)
         {
-            usernameList[i].text = playerNames[i];
+            playerName.text = playersInGame[n];
+            n++;
         }
-        
+
     }
 
     [SerializeField] TextMeshProUGUI joinCodeTextBox;
@@ -113,7 +114,7 @@ public class GameScreenManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI secretWordTMP;
     public void showSecretWord(int wordIndex)
     {
-        word = currentCard.words[wordIndex];
+        string word = currentCard.words[wordIndex];
         secretWordTMP.text = word;
     }
 

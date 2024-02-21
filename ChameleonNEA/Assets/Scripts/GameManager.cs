@@ -10,6 +10,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : NetworkBehaviour
@@ -17,6 +18,7 @@ public class GameManager : NetworkBehaviour
     GameScreenManager gameScreenManager;
     UsernameInputScript usernameInputScript;
     StartGameScript startGameScript;
+    VoteScreenScript voteScreenScript;
     public Dictionary<ulong, string> playerDict = new Dictionary<ulong, string>();
 
     void Awake()
@@ -24,6 +26,7 @@ public class GameManager : NetworkBehaviour
         usernameInputScript = GameObject.Find("UsernameInp").GetComponent<UsernameInputScript>();
         gameScreenManager = GameObject.Find("GameScreenManager").GetComponent<GameScreenManager>();
         startGameScript = GameObject.Find("StartGameBtn").GetComponent<StartGameScript>();
+        voteScreenScript = GameObject.Find("VoteScreenPnl").GetComponent<VoteScreenScript>();
     }
 
     async void Start()
@@ -60,17 +63,9 @@ public class GameManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
         {
-            /*
             removePlayerClientRPC(playerDict[clientId]);
             playerDict.Remove(clientId);
-            */
         };
-
-
-        public int numOfPlayers()
-        {
-            return NetworkManager.Singleton.ConnectedClients;
-        }
 
 
     }
@@ -128,19 +123,36 @@ public class GameManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void sendWordClientRPC(int wordIndex, ClientRpcParams clientRpcParams)
+    public void sendWordClientRPC(int wordIndex, ClientRpcParams clientRpcParams = default)
     {
         gameScreenManager.showSecretWord(wordIndex);
     }
 
-    /// <summary>
-    /// Shows the clue input panel on the client's screen
-    /// </summary>
-    /// <param name="clientRpcParams"> only sends to the clientID specified by the params </param>
+    [ClientRpc]
+    public void sendChameleonClientRPC(ClientRpcParams clientRpcParams = default)
+    {
+        gameScreenManager.showChameleon();
+    }
+
     [ClientRpc]
     public void turnStartClientRPC(ClientRpcParams clientRpcParams)
     {
         gameScreenManager.setCluePanelVisible(true);
+    }
+
+    [ClientRpc]
+    public void sendClueClientRPC(ulong senderID, string clue)
+    {
+        playerClues.Add(senderID, clue);
+    }
+
+
+    [SerializeField] GameObject voteScreen;
+    [ClientRpc]
+    public void startVoteStageClientRPC()
+    {
+        voteScreenScript.organisePositions(playerDict.Count);
+        gameScreenManager.showScreen(voteScreen);
     }
 
     //For the clients-----------------------------------------------------------------------------------------------------
@@ -166,9 +178,17 @@ public class GameManager : NetworkBehaviour
         addPlayerClientRPC(username);
     }
 
-    [ServerRpc(RequireOwnership =false)]
-    void sendClueServerRPC(string clue)
+    Dictionary<ulong, string> playerClues = new Dictionary<ulong, string>();
+    [ServerRpc(RequireOwnership = false)]
+    public void sendClueServerRPC(string clue, ServerRpcParams serverRpcParams = default)
     {
-
+        ulong senderID = serverRpcParams.Receive.SenderClientId;
+        Debug.Log(playerDict[senderID] + clue);
+        sendClueClientRPC(senderID, clue);
+        //Show clue panel on next clients screen
+        startGameScript.nextTurn(senderID);
+        string username = playerDict[senderID];
+        voteScreenScript.addClueInfo(username, clue);
+        
     }
 }
