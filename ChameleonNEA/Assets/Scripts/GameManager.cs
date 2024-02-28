@@ -141,17 +141,18 @@ public class GameManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void sendClueClientRPC(ulong senderID, string clue)
+    public void sendClueClientRPC(string senderName, string clue)
     {
-        playerClues.Add(senderID, clue);
+        Debug.Log(senderName + clue);
+        playerClues.Add(senderName, clue);
+        voteScreenScript.addClueInfo(senderName, clue);
     }
-
 
     [SerializeField] GameObject voteScreen;
     [ClientRpc]
     public void startVoteStageClientRPC()
     {
-        voteScreenScript.organisePositions(playerDict.Count);
+        voteScreenScript.organisePositions(playerClues.Count);
         gameScreenManager.showScreen(voteScreen);
     }
 
@@ -178,17 +179,17 @@ public class GameManager : NetworkBehaviour
         addPlayerClientRPC(username);
     }
 
-    Dictionary<ulong, string> playerClues = new Dictionary<ulong, string>();
+    Dictionary<string, string> playerClues = new Dictionary<string, string>();
     [ServerRpc(RequireOwnership = false)]
     public void sendClueServerRPC(string clue, ServerRpcParams serverRpcParams = default)
     {
         ulong senderID = serverRpcParams.Receive.SenderClientId;
-        Debug.Log(playerDict[senderID] + clue);
-        sendClueClientRPC(senderID, clue);
+        string senderName = playerDict[senderID];
+        Debug.Log(senderName + clue);
+        sendClueClientRPC(senderName, clue);
         //Show clue panel on next clients screen
         startGameScript.nextTurn(senderID);
-        string username = playerDict[senderID];
-        voteScreenScript.addClueInfo(username, clue);
+        
         
     }
 }

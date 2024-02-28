@@ -27,8 +27,12 @@ public class VoteScreenScript : MonoBehaviour
     }
 
     [SerializeField] GameObject[] votePanels;
+    [SerializeField] GameObject confirmVotePnl;
+
     public void organisePositions(int numPlayers)
     {
+        confirmVotePnl.SetActive(false);
+
         for (int i = numPlayers; i < votePanels.Length - 1; i++)
         {
             votePanels[i].gameObject.SetActive(false);
@@ -83,6 +87,14 @@ public class VoteScreenScript : MonoBehaviour
         TextMeshProUGUI[] playerTMPs = votePanels[votesFilled].GetComponentsInChildren<TextMeshProUGUI>();
         playerTMPs[0].text = username;
         playerTMPs[1].text = clue;
+        votesFilled++;
+    }
 
+    public void voteButtonClick(TextMeshProUGUI namePanel)
+    {
+        confirmVotePnl.SetActive(true);
+        TextMeshProUGUI confirmLabel = confirmVotePnl.GetComponent<TextMeshProUGUI>();
+        string playerName = namePanel.text;
+        confirmLabel.text = ("Confirm vote for " + playerName);
     }
 }
